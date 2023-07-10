@@ -1,13 +1,10 @@
 "use client"
-
-import Modal from "@/components/ui/Modal";
+import { StoreModal } from "@/components/store-modal";
 
 const SetupPage = () => {
   return (
    <div className="p-4">
-      <Modal title="ilham" description="no pain no gain" isOpen onClose={() => {}}>
-          children
-      </Modal>
+     <StoreModal/>
    </div>
   );
 };
