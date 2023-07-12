@@ -65,7 +65,7 @@ export const StoreModal = () => {
                                 <FormItem>
                                     <FormLabel>Name</FormLabel>
                                     <FormControl>
-                                        <Input disabled={isLoading} placeholder="Aype a Name" {...field} />
+                                        <Input disabled={isLoading} placeholder="Store name" {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
