@@ -1,20 +1,20 @@
-"use client"
-
-import { useStoreModal } from "@/hooks/useStoreModal";
+"use client";
 
 import { useEffect } from "react";
 
-const SetupPage = () => {
-  const onOpen = useStoreModal((state) => state.onOpen)
-  const isOpen = useStoreModal((state) => state.isOpen)
+import { useStoreModal } from "@/hooks/useStoreModal";
 
+const SetupPage = () => {
+  const onOpen = useStoreModal((state) => state.onOpen);
+  const isOpen = useStoreModal((state) => state.isOpen);
 
   useEffect(() => {
     if (!isOpen) {
-      onOpen()
+      onOpen();
     }
-  }, [onOpen, isOpen])
+  }, [isOpen, onOpen]);
+
   return null;
 };
-
+ 
 export default SetupPage;

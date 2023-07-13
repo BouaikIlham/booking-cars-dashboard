@@ -25,7 +25,7 @@ export default function RootLayout({
           <body className={inter.className}>
             <ToasterProvider />
             <ModalProvider />
-            {children}
+             {children}
           </body>
       </ClerkProvider>
     </html>
