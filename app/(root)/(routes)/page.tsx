@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 
 import { useStoreModal } from "@/hooks/useStoreModal";
-
 const SetupPage = () => {
   const onOpen = useStoreModal((state) => state.onOpen);
   const isOpen = useStoreModal((state) => state.isOpen);
