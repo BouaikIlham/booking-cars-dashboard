@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 import { useStoreModal } from "@/hooks/useStoreModal";
-import { Modal } from "../components/ui/Modal";
+import { Modal } from "../ui/Modal";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod"
