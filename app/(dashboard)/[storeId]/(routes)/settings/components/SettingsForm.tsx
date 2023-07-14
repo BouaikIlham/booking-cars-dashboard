@@ -53,8 +53,9 @@ const SettingsForm: React.FC<SettingsFormProps> = ({
         />
         <Button
           variant="destructive"
+          disabled={loading}
           size="icon"
-          onClick={() => {}}
+          onClick={() => setOpen(true)}
         >
         <Trash className="h-4 w-4"/>
         </Button>
