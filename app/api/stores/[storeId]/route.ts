@@ -30,7 +30,31 @@ export async function PATCH(
     return NextResponse.json(store);
 
   } catch (error) {
-    console.log("[STORES_POST]", error);
+    console.log("[STORE_PATCH]", error);
     return new NextResponse("Internal_error", { status: 500 });
   }
 }
+
+export async function DELETE(
+    req: Request,
+    { params }: { params: { storeId: string } }
+  ) {
+    try {
+      const { userId } = auth();  
+      if (!userId) {
+          return new NextResponse("Unauthorized", { status: 401 });
+      }
+      const store = await prismadb.store.deleteMany({
+        where: {
+          id: params.storeId,
+          userId,
+        },
+      });
+  
+      return NextResponse.json(store);
+  
+    } catch (error) {
+      console.log("[STORE_DELETE]", error);
+      return new NextResponse("Internal_error", { status: 500 });
+    }
+  }
