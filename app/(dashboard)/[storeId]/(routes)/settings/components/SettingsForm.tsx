@@ -1,5 +1,8 @@
 "use client";
 
+import axios from "axios";
+import { useParams, useRouter } from "next/navigation";
+import AlertModal from "@/components/modals/alert-modal";
 import { useState } from "react";
 import { Store } from "@prisma/client";
 import Heading from "@/components/ui/Heading";
@@ -19,8 +22,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
 
 interface SettingsFormProps {
   initialData: Store;
@@ -45,7 +46,20 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       await axios.patch(`/api/stores/${params.storeId}`, data);
-      toast.success("store updated")
+      toast.success("store updated");
+      router.refresh();
+    } catch (error) {
+      toast.error("Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onConfirm =  async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/stores/${params.storeId}`);
+      toast.success("store deleted.");
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong!");
@@ -55,6 +69,12 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   };
   return (
     <>
+      <AlertModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onConfirm={onConfirm}
+        loading={loading}
+      />
       <div className="flex items-center justify-between">
         <Heading title="Settings" description="Manage store preferences" />
         <Button
