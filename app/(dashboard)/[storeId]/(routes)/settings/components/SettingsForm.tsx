@@ -62,7 +62,7 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
       toast.success("store deleted.");
       router.refresh();
     } catch (error) {
-      toast.error("Something went wrong!");
+      toast.error("Make sure you delete products and categories first.");
     } finally {
       setLoading(false);
     }
@@ -116,6 +116,10 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
           </Button>
         </form>
       </Form>
+      <Separator />
+        <div>
+          api alert
+        </div>
     </>
   );
 };
