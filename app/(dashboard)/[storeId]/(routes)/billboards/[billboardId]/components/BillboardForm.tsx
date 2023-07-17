@@ -29,7 +29,6 @@ interface BillboardFormProps {
 }
 
 
-
 const formSchema = z.object({
   label: z.string().min(1),
   imageUrl: z.string().min(1),
@@ -57,15 +56,17 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
   const action = initialData ? "Save changes" : "Create billboard";
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    console.log(data)
+
     try {
       setLoading(true);
       if (initialData) {
         await axios.patch(`/api/${params.storeId}/billboards/${params.billboardId}`, data);
 
       } else {
-        await axios.patch(`/api/${params.storeId}/billboards`, data);
-
+        await axios.post(`/api/${params.storeId}/billboards`, data);
       }
+
       toast.success(toastMessage);
       router.refresh();
     } catch (error) {
@@ -78,11 +79,11 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
   const onConfirm = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/stores/${params.storeId}`);
-      toast.success("");
+      await axios.delete(`/api//billboards/${params.billboardId}`);
+      toast.success("Billboard deleted");
       router.refresh();
     } catch (error) {
-      toast.error("Make sure you delete products and categories first.");
+      toast.error("Make sure you delete categories using this billboards.");
     } finally {
       setLoading(false);
     }
