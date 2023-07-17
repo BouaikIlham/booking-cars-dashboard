@@ -10,6 +10,8 @@ import { useParams, useRouter } from "next/navigation";
 const BillboardClient = () => {
     const params = useParams()
     const router = useRouter()
+
+  
   return (
 <>
     <div className="flex items-center justify-between">
