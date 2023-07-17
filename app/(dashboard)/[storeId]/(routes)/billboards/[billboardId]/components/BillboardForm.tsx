@@ -88,14 +88,16 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
-        <Button
-          variant="destructive"
-          disabled={loading}
-          size="icon"
-          onClick={() => setOpen(true)}
-        >
-          <Trash className="h-4 w-4" />
-        </Button>
+       {initialData && (
+           <Button
+            variant="destructive"
+            disabled={loading}
+            size="icon"
+            onClick={() => setOpen(true)}
+          >
+            <Trash className="h-4 w-4" />
+          </Button>
+       )}
       </div>
       <Separator />
       <Form {...form}>
@@ -121,24 +123,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
                   <FormMessage />
                 </FormItem>
               )}
-            />
-            <FormField
-              control={form.control}
-              name="imageUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Image</FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={loading}
-                      placeholder="add image "
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            />     
           </div>
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
