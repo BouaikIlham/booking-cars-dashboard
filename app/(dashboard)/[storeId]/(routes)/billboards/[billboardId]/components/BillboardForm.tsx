@@ -55,9 +55,9 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
     : " Billboard created.";
   const action = initialData ? "Save changes" : "Create billboard";
 
-  const onSubmit = async (data: z.infer<typeof formSchema>) => {
-    console.log(data)
 
+  console.log(initialData)
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
       if (initialData) {

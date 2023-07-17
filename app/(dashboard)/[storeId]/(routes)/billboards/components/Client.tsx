@@ -3,11 +3,17 @@
 import Heading from "@/components/ui/Heading";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Billboard } from "@prisma/client";
 import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 
+interface BillboardClient {
+    data: Billboard[]
+}
 
-const BillboardClient = () => {
+const BillboardClient: React.FC<BillboardClient> = ({
+    data
+}) => {
     const params = useParams()
     const router = useRouter()
 
@@ -25,6 +31,15 @@ const BillboardClient = () => {
         </Button>
     </div>
     <Separator />
+
+    {data.map((billboard) => (
+        <div key={billboard.id}>
+            <div>
+                <h1>{billboard.label}</h1>
+                <img  src={billboard.imageUrl}/>
+            </div>
+        </div>
+    ))}
    </>
   )
 }
