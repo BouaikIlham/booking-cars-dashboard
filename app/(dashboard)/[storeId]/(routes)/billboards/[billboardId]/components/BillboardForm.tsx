@@ -28,6 +28,8 @@ interface BillboardFormProps {
   initialData: Billboard | null;
 }
 
+
+
 const formSchema = z.object({
   label: z.string().min(1),
   imageUrl: z.string().min(1),
@@ -47,11 +49,24 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
     },
   });
 
+  const title = initialData ? "Edit billboard" : "Create billboard";
+  const description = initialData ? "Edit a billboard" : "Add a new  billboard";
+  const toastMessage = initialData
+    ? " Billboard updated."
+    : " Billboard created.";
+  const action = initialData ? "Save changes" : "Create billboard";
+
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
-      await axios.patch(`/api/stores/${params.storeId}`, data);
-      toast.success("store updated");
+      if (initialData) {
+        await axios.patch(`/api/${params.storeId}/billboards/${params.billboardId}`, data);
+
+      } else {
+        await axios.patch(`/api/${params.storeId}/billboards`, data);
+
+      }
+      toast.success(toastMessage);
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong!");
@@ -72,14 +87,6 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
       setLoading(false);
     }
   };
-
-  const title = initialData ? "Edit billboard" : "Create billboard";
-  const description = initialData ? "Edit a billboard" : "Add a new  billboard";
-  const toastMessage = initialData
-    ? " Billboard updated."
-    : " Billboard created.";
-  const action = initialData ? "Save changes" : "Create billboard";
-
   return (
     <>
       <AlertModal
