@@ -55,8 +55,6 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
     : " Billboard created.";
   const action = initialData ? "Save changes" : "Create billboard";
 
-
-  console.log(initialData)
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
@@ -82,6 +80,7 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
       setLoading(true);
       await axios.delete(`/api//billboards/${params.billboardId}`);
       toast.success("Billboard deleted");
+      router.push(`/${params.storeId}/billboards`)
       router.refresh();
     } catch (error) {
       toast.error("Make sure you delete categories using this billboards.");
