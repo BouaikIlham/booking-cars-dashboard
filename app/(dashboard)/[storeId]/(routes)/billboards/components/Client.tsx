@@ -1,14 +1,15 @@
 "use client"
 
 import Heading from "@/components/ui/Heading";
+import { BillboardColumns, columns } from "../components/columns";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Billboard } from "@prisma/client";
 import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
+import { DataTable } from "@/components/ui/data-table";
 
 interface BillboardClient {
-    data: Billboard[]
+    data: BillboardColumns[]
 }
 
 const BillboardClient: React.FC<BillboardClient> = ({
@@ -22,7 +23,7 @@ const BillboardClient: React.FC<BillboardClient> = ({
 <>
     <div className="flex items-center justify-between">
         <Heading
-            title="Billboards (0)"
+            title={`Billboards (${data.length})`} 
             description="Manage billnoards for you store"
         />
         <Button onClick={() => router.push(`/${params.storeId}/billboards/new`)}> 
@@ -32,14 +33,7 @@ const BillboardClient: React.FC<BillboardClient> = ({
     </div>
     <Separator />
 
-    {data.map((billboard) => (
-        <div key={billboard.id}>
-            <div>
-                <h1>{billboard.label}</h1>
-                <img  src={billboard.imageUrl}/>
-            </div>
-        </div>
-    ))}
+    <DataTable columns={columns} data={data}/>
    </>
   )
 }
