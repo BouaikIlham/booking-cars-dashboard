@@ -75,27 +75,27 @@ const BillboardForm: React.FC<BillboardFormProps> = ({ initialData }) => {
     }
   };
 
-  const onConfirm = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(`/api//billboards/${params.billboardId}`);
-      toast.success("Billboard deleted");
-      router.push(`/${params.storeId}/billboards`)
-      router.refresh();
-    } catch (error) {
-      toast.error("Make sure you delete categories using this billboards.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const onDelete = async () => {
+  //   try {
+  //     setLoading(true);
+  //     await axios.delete(`/api//billboards/${params.billboardId}`);
+  //     toast.success("Billboard deleted");
+  //     router.push(`/${params.storeId}/billboards`)
+  //     router.refresh();
+  //   } catch (error) {
+  //     toast.error("Make sure you delete categories using this billboards.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
   return (
     <>
-      <AlertModal
+      {/* <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={onConfirm}
+        onConfirm={onDelete}
         loading={loading}
-      />
+      /> */}
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (

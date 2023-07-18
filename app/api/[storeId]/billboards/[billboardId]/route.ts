@@ -37,10 +37,6 @@ export async function DELETE(
       return new NextResponse("Unauthenticated", { status: 403 });
     }
 
-    if (params.billboardId) {
-      return new NextResponse("Billboard is ie required", { status: 400 });
-    }
-
     const storeByUserId = await prismadb.store.findFirst({
       where: {
         id: params.storeId,
@@ -52,11 +48,16 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 405 });
     }
 
+    if (!params.billboardId) {
+      return new NextResponse("Billboard id is ie required", { status: 400 });
+    }
+
     const billboard = await prismadb.billboard.delete({
       where: {
         id: params.billboardId,
       },
     });
+    
     return NextResponse.json(billboard);
   } catch (error) {
     console.log("[BILLBOARD_DELETE]", error);
