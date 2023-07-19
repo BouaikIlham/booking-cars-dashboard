@@ -4,7 +4,7 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import AlertModal from "@/components/modals/alert-modal";
 import { useState } from "react";
-import { Category, Store } from "@prisma/client";
+import { Billboard, Category, Store } from "@prisma/client";
 import Heading from "@/components/ui/Heading";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
@@ -23,17 +23,31 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-interface CategoryFormProps {
-  initialData: Category | null; 
-}
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
+interface CategoryFormProps {
+  initialData: Category | null;
+  billboards: Billboard[];
+}
 
 const formSchema = z.object({
   name: z.string().min(1),
   billboardId: z.string().min(1),
 });
 
-const CategoryForm: React.FC<CategoryFormProps> = ({ initialData }) => {
+const CategoryForm: React.FC<CategoryFormProps> = ({
+  initialData,
+  billboards,
+}) => {
+
+  console.log(billboards)
+
   const params = useParams();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -58,14 +72,16 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ initialData }) => {
     try {
       setLoading(true);
       if (initialData) {
-        await axios.patch(`/api/${params.storeId}/categories/${params.billboardId}`, data);
-
+        await axios.patch(
+          `/api/${params.storeId}/categories/${params.billboardId}`,
+          data
+        );
       } else {
         await axios.post(`/api/${params.storeId}/categories`, data);
       }
 
       toast.success(toastMessage);
-      router.push(`/${params.storeId}/categories`)
+      router.push(`/${params.storeId}/categories`);
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong!");
@@ -77,9 +93,11 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ initialData }) => {
   const onDelete = async () => {
     try {
       setLoading(true);
-      await axios.delete(`/api/${params.storeId}/categories/${params.billboardId}`);
+      await axios.delete(
+        `/api/${params.storeId}/categories/${params.billboardId}`
+      );
       toast.success("category deleted");
-      router.push(`/${params.storeId}/categories`)
+      router.push(`/${params.storeId}/categories`);
       router.refresh();
     } catch (error) {
       toast.error("Something went wrong!");
@@ -110,26 +128,67 @@ const CategoryForm: React.FC<CategoryFormProps> = ({ initialData }) => {
       </div>
       <Separator />
       <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
-            <div className="md:grid md:grid-cols-3 gap-8">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 w-full"
+        >
+          <div className="md:grid md:grid-cols-3 gap-8">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Category name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="billboardId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Billboard</FormLabel>
+                  <Select
+                    disabled={loading}
+                    value={field.value}
+                    defaultValue={field.value}
+                    onValueChange={field.onChange}
+                  >
                     <FormControl>
-                      <Input disabled={loading} placeholder="Category name" {...field} />
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a billboard"
+                        />
+                      </SelectTrigger>
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <Button disabled={loading} className="ml-auto" type="submit">
-              {action}
-            </Button>
-          </form>
+                    <SelectContent>
+                      {billboards.map((billboard) => (
+                        <SelectItem 
+                          key={billboard.id}
+                          value={billboard.id}
+                        >
+                          {billboard.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button disabled={loading} className="ml-auto" type="submit">
+            {action}
+          </Button>
+        </form>
       </Form>
       <Separator />
     </>
