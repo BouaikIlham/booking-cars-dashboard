@@ -33,7 +33,7 @@ const CategoryClient: React.FC<CategoryClient> = ({
     </div>
     <Separator />
 
-    <DataTable serachKey="label" columns={columns} data={data}/>
+    <DataTable serachKey="name" columns={columns} data={data}/>
    </>
   )
 }

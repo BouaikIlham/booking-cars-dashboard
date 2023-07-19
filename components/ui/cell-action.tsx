@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { BillboardColumn } from "@/app/(dashboard)/[storeId]/(routes)/billboards/components/columns";
 import { Button } from "./button";
 import { toast } from "react-hot-toast";
 import axios from "axios";
@@ -15,9 +14,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
+import { CategoryColumn } from "@/app/(dashboard)/[storeId]/(routes)/categories/components/columns";
 
 interface CellActionProps {
-  data: BillboardColumn;
+  data: CategoryColumn;
 }
 
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
