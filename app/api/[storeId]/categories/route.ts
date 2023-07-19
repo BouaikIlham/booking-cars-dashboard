@@ -19,7 +19,7 @@ export async function POST(
     }
 
     if (!name) {
-      return new NextResponse("Label is required", { status: 400 });
+      return new NextResponse("name is required", { status: 400 });
     }
 
     if (!billboardId) {
@@ -51,7 +51,7 @@ export async function POST(
   
     return NextResponse.json(category);
   } catch (error) {
-    console.log('[BILLBOARDS_POST]', error);
+    console.log('[CATEGORIES_POST]', error);
     return new NextResponse("Internal error", { status: 500 });
   }
 };
