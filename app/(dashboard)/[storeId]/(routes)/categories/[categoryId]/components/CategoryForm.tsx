@@ -46,8 +46,6 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
   billboards,
 }) => {
 
-  console.log(billboards)
-
   const params = useParams();
   const router = useRouter();
   const [open, setOpen] = useState(false);
