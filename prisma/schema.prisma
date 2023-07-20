@@ -19,6 +19,7 @@ model Store {
   updatedAt DateTime @updatedAt
   billboards Billboard [] @relation("StoreToBillboard")
   categories Category[] @relation("StoreToCategory")
+  cars Car[] @relation("StoreToCar")
 }
 
 model Billboard {
@@ -43,9 +44,42 @@ model Category {
   billboardId String // Foreign Key to Billboard
   billboard   Billboard   @relation(fields: [billboardId], references: [id])
   name String
+  cars Car[] @relation("CategoryToCar")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
+
   @@index([billboardId])
   @@index([storeId])
+}
+
+model Car {
+  id String @id @default(uuid())
+  storeId String 
+  store Store @relation("StoreToCar", fields: [storeId], references: [id])
+  categoryId String
+  category Category @relation("CategoryToCar", fields: [categoryId], references: [id])
+  model String
+  mileage Decimal
+  capicity String
+  transmission String
+  isAvailable Boolean
+  description String
+  price Decimal
+  images Image []
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+  @@index([categoryId])
+
+}
+
+model Image {
+  id String @id @default(uuid())
+  carId String
+  car Car @relation(fields: [carId], references: [id])
+
+  @@index([carId])
+
 }
