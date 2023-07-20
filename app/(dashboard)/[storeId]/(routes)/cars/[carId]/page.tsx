@@ -1,4 +1,5 @@
 import prismadb from "@/lib/prismadb"
+import CarForm from "./components/CarForm"
 
 const Car = async ({
     params
@@ -15,7 +16,7 @@ const Car = async ({
     return (
         <div className="flex-col">
             <div className="flex-1 space-y-4 p-8">
-                car form
+                <CarForm initialData={car} />
             </div>
         </div>
     )
