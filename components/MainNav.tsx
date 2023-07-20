@@ -29,7 +29,12 @@ const MainNav = ({
            label: 'Settings',
            active: pathname === `/${params.storeId}/settings`
         },
-   
+        
+        {
+            href: `/${params.storeId}/cars`,
+            label: 'Cars',
+            active: pathname === `/${params.storeId}cars`
+         },
     ]
 
   return (
