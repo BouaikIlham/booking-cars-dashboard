@@ -25,7 +25,7 @@ const CarsClient: React.FC<CarsClientProps>= ({
             title={`Cars (${data.length})`} 
             description="Manage cars for you store"
         />
-        <Button onClick={() => router.push(`/${params.storeId}/billboards/new`)}> 
+        <Button onClick={() => router.push(`/${params.storeId}/cars/new`)}> 
             <Plus className="mr-2 h-4 w-4"/>
                 Add New
         </Button>
