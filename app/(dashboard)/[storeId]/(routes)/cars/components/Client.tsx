@@ -1,18 +1,17 @@
 "use client"
-
 import Heading from "@/components/ui/Heading";
-import { BillboardColumn, columns } from "../components/columns";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { DataTable } from "@/components/ui/data-table";
+import { CarColumn, columns } from "./columns";
 
-interface BillboardClientProps {
-    data: BillboardColumn[]
+interface CarsClientProps {
+    data: CarColumn[]
 }
 
-const BillboardClient: React.FC<BillboardClientProps> = ({
+const CarsClient: React.FC<CarsClientProps>= ({
     data
 }) => {
     const params = useParams()
@@ -23,8 +22,8 @@ const BillboardClient: React.FC<BillboardClientProps> = ({
 <>
     <div className="flex items-center justify-between">
         <Heading
-            title={`Billboards (${data.length})`} 
-            description="Manage billboards for you store"
+            title={`Cars (${data.length})`} 
+            description="Manage cars for you store"
         />
         <Button onClick={() => router.push(`/${params.storeId}/billboards/new`)}> 
             <Plus className="mr-2 h-4 w-4"/>
@@ -33,9 +32,9 @@ const BillboardClient: React.FC<BillboardClientProps> = ({
     </div>
     <Separator />
 
-    <DataTable serachKey="label" columns={columns} data={data}/>
+    <DataTable serachKey="model" columns={columns} data={data}/>
    </>
   )
 }
 
-export default BillboardClient;
+export default CarsClient;
