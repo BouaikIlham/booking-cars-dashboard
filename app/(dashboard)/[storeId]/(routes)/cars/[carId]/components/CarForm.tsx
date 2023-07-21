@@ -62,9 +62,9 @@ const CarForm: React.FC<CarFormProps> = ({ initialData }) => {
       mileage: "",
       capicity: "",
       transmission: "",
-      isAvailable: "",
+      isAvailable: "false",
       description: "",
-      price: "",
+      price: "0",
       imageUrl: "",
     },
   });
@@ -96,25 +96,25 @@ const CarForm: React.FC<CarFormProps> = ({ initialData }) => {
     }
   };
 
-  //   const onDelete = async () => {
-  //     try {
-  //       setLoading(true);
-  //       await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`);
-  //       toast.success("Billboard deleted");
-  //       router.push(`/${params.storeId}/billboards`)
-  //       router.refresh();
-  //     } catch (error) {
-  //       toast.error("Make sure you delete categories using this billboards.");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
+    const onDelete = async () => {
+      try {
+        setLoading(true);
+        await axios.delete(`/api/${params.storeId}/billboards/${params.billboardId}`);
+        toast.success("Billboard deleted");
+        router.push(`/${params.storeId}/billboards`)
+        router.refresh();
+      } catch (error) {
+        toast.error("Make sure you delete categories using this billboards.");
+      } finally {
+        setLoading(false);
+      }
+    };
   return (
     <>
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        // onConfirm={onDelete}
+        onConfirm={onDelete}
         loading={loading}
       />
       <div className="flex items-center justify-between">

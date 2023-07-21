@@ -1,17 +1,16 @@
 "use client"
-import { Decimal } from "@prisma/client/runtime/library"
 import { ColumnDef } from "@tanstack/react-table"
-
+import CellAction from "./cell-action"
 
 export type CarColumn = {
   id: string
   model: string
-  mileage: Decimal
+  mileage: string
   capicity: string
   transmission: string
   isAvailable: Boolean
   description: string
-  price: Decimal
+  price: string
   createdAt: string
 
 
@@ -48,13 +47,17 @@ export const columns: ColumnDef<CarColumn>[] = [
     header: "Price"
   },
   {
+    accessorKey: "category",
+    header: "Category",
+  },
+  {
     accessorKey: "createdAt",
     header: "Date",
   },
 
-//   {
-//     id: "actions",
-//     cell: ({ row }) => <CellAction data={row.original} />
-//   }
+  {
+    id: "actions",
+    cell: ({ row }) => <CellAction />
+  }
 
 ]
