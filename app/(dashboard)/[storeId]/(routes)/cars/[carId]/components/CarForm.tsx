@@ -87,13 +87,39 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, categories }) => {
   const toastMessage = initialData ? " car updated." : " car created.";
   const action = initialData ? "Save changes" : "Create car";
 
-  const onSubmit = () => {
-    console.log("onSubmit");
-  };
+  const onSubmit = async (data: z.infer<typeof formSchema>) => {
+    try {
+      setLoading(true);
+      if (initialData) {
+        await axios.patch(`/api/${params.storeId}/cars/${params.carId}`, data);
 
-  const onDelete = () => {
-    console.log("onDelete");
-  };
+      } else {
+        await axios.post(`/api/${params.storeId}/cars`, data);
+        console.log(data)
+
+      }
+
+      toast.success(toastMessage);
+      router.push(`/${params.storeId}/cars`)
+      router.refresh();
+    } catch (error) {
+      toast.error("Something went wrong!");
+    } finally {
+      setLoading(false);
+    }  };
+
+  const onDelete = async () => {
+    try {
+      setLoading(true);
+      await axios.delete(`/api/${params.storeId}/cars/${params.billboardId}`);
+      toast.success("car deleted");
+      router.push(`/${params.storeId}/cars`)
+      router.refresh();
+    } catch (error) {
+      toast.error("Make sure you delete categories .");
+    } finally {
+      setLoading(false);
+    }  };
   return (
     <>
       <AlertModal
