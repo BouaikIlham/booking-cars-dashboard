@@ -16,6 +16,7 @@ import { toast } from "react-hot-toast";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -30,6 +31,7 @@ import {
 } from "@/components/ui/select";
 import ImageUpload from "@/components/ui/image-upload";
 import { Car, Category, Image } from "@prisma/client";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface CarFormProps {
   initialData:
@@ -261,7 +263,7 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, categories }) => {
                   <FormControl>
                     <Input
                       disabled={loading}
-                      placeholder="Price per night ..."
+                      placeholder="9.99 ..."
                       {...field}
                     />
                   </FormControl>
@@ -286,11 +288,30 @@ const CarForm: React.FC<CarFormProps> = ({ initialData, categories }) => {
                 </FormItem>
               )}
             />
+             <FormField
+              control={form.control}
+              name="isAvailable"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-4">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      // @ts-ignore
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                    <div className="space-y-1 leading-none">
+                      <FormLabel>
+                        Available
+                      </FormLabel>
+                      <FormDescription>
+                        This car will appear on the home page
+                      </FormDescription>
+                    </div>
+                </FormItem>
+              )}
+            />
           </div>
-           <div>
-           isAvailable
-
-           </div>
 
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}
