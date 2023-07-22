@@ -21,14 +21,23 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import ImageUpload from "@/components/ui/image-upload";
 import { Car, Category, Image } from "@prisma/client";
 
 interface CarFormProps {
-  initialData: Car & {
-    images: Image[]
-  } | null
-  categories: Category[]
+  initialData:
+    | (Car & {
+        images: Image[];
+      })
+    | null;
+  categories: Category[];
 }
 
 const formSchema = z.object({
@@ -40,19 +49,12 @@ const formSchema = z.object({
   transmission: z.string().min(1),
   isAvailable: z.boolean().default(false).optional(),
   images: z.object({ url: z.string() }).array(),
-  price: z.coerce.number().min(1)
-
+  price: z.coerce.number().min(1),
 });
 
-type CarFormValues = z.infer<typeof formSchema>
+type CarFormValues = z.infer<typeof formSchema>;
 
-
-
-const CarForm:React.FC<CarFormProps> = ({
-  initialData,
-  categories
-}) => {
-
+const CarForm: React.FC<CarFormProps> = ({ initialData, categories }) => {
   const params = useParams();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -60,38 +62,38 @@ const CarForm:React.FC<CarFormProps> = ({
 
   const form = useForm<CarFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: initialData ? {
-      ...initialData,
-      price: parseFloat(String(initialData?.price))
-    } : {
-      model: '',
-      description: '',
-      categoryId: '',
-      mileage:'',
-      capicity:'',
-      transmission:'',
-      price: 0,
-      images: [],
-      isAvailable: false
-    }
-  })
+    defaultValues: initialData
+      ? {
+          ...initialData,
+          price: parseFloat(String(initialData?.price)),
+        }
+      : {
+          model: "",
+          description: "",
+          categoryId: "",
+          mileage: "",
+          capicity: "",
+          transmission: "",
+          price: 0,
+          images: [],
+          isAvailable: false,
+        },
+  });
 
   const title = initialData ? "Edit car" : "Create car";
   const description = initialData ? "Edit a car" : "Add a new  car";
-  const toastMessage = initialData
-    ? " car updated."
-    : " car created.";
+  const toastMessage = initialData ? " car updated." : " car created.";
   const action = initialData ? "Save changes" : "Create car";
 
   const onSubmit = () => {
-    console.log("onSubmit")
-  }
+    console.log("onSubmit");
+  };
 
   const onDelete = () => {
-    console.log("onDelete")
-  }
+    console.log("onDelete");
+  };
   return (
-<>
+    <>
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
@@ -113,49 +115,191 @@ const CarForm:React.FC<CarFormProps> = ({
       </div>
       <Separator />
       <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="space-y-8 w-full"
+        >
           <div className="md:grid md:grid-cols-3 gap-8">
             <FormField
-                control={form.control}
-                name="images"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel> Images </FormLabel>
+              control={form.control}
+              name="images"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel> Images </FormLabel>
+                  <FormControl>
+                    <ImageUpload
+                      value={field.value.map((image) => image.url)}
+                      disabled={loading}
+                      onChange={(url) =>
+                        field.onChange([...field.value, { url }])
+                      }
+                      onRemove={(url) =>
+                        field.onChange([
+                          ...field.value.filter(
+                            (current) => current.url !== url
+                          ),
+                        ])
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="categoryId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    disabled={loading}
+                    value={field.value}
+                    defaultValue={field.value}
+                    onValueChange={field.onChange}
+                  >
                     <FormControl>
-                      <ImageUpload 
-                        value={field.value.map((image) => image.url)} 
-                        disabled={loading} 
-                        onChange={(url) => field.onChange([...field.value, {url}])}
-                        onRemove={(url) => field.onChange([...field.value.filter((current) => current.url !== url)])}
-                      />
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select a billboard"
+                        />
+                      </SelectTrigger>
                     </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="md:grid md:grid-cols-3 gap-8">
-              {/* <FormField
-                control={form.control}
-                name="label"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Label</FormLabel>
-                    <FormControl>
-                      <Input disabled={loading} placeholder="Billboard label" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-            </div>
-            <Button disabled={loading} className="ml-auto" type="submit">
-              {action}
-            </Button>
-          </form>
+                    <SelectContent>
+                      {categories.map((category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="md:grid md:grid-cols-3 gap-8">
+            <FormField
+              control={form.control}
+              name="model"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Model</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="car model ..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="mileage"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Mileage</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="car mileage ..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <div className="md:grid md:grid-cols-3 gap-8">
+            <FormField
+              control={form.control}
+              name="capicity"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Capicity</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="car capicity ..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="transmission"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Transmission</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="car transmission ..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          <div className="md:grid md:grid-cols-3 gap-8">
+            <FormField
+              control={form.control}
+              name="price"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Price</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="Price per night ..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description</FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={loading}
+                      placeholder="descripe your car ..."
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+           <div>
+           isAvailable
+
+           </div>
+
+          <Button disabled={loading} className="ml-auto" type="submit">
+            {action}
+          </Button>
+        </form>
       </Form>
       <Separator />
-    </>  )
-}
+    </>
+  );
+};
 
-export default CarForm
+export default CarForm;
