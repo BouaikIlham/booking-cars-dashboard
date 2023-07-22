@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs';
+import { NextResponse } from "next/server";
+import { auth } from "@clerk/nextjs";
 
-import prismadb from '@/lib/prismadb';
- 
+import prismadb from "@/lib/prismadb";
+
 export async function POST(
   req: Request,
   { params }: { params: { storeId: string } }
@@ -11,7 +11,17 @@ export async function POST(
     const { userId } = auth();
     const body = await req.json();
 
-    const { model, description, mileage, capicity, transmission, isAvailable, price, categoryId, images } = body;
+    const {
+      model,
+      description,
+      mileage,
+      capicity,
+      transmission,
+      isAvailable,
+      price,
+      categoryId,
+      images,
+    } = body;
 
     if (!userId) {
       return new NextResponse("Unauthenticated", { status: 403 });
@@ -26,27 +36,27 @@ export async function POST(
     }
 
     if (!mileage) {
-        return new NextResponse("mileage URL is required", { status: 400 });
+      return new NextResponse("mileage URL is required", { status: 400 });
     }
 
     if (!capicity) {
-        return new NextResponse("capicity URL is required", { status: 400 });
+      return new NextResponse("capicity URL is required", { status: 400 });
     }
 
     if (!transmission) {
-        return new NextResponse("transmission is required", { status: 400 });
+      return new NextResponse("transmission is required", { status: 400 });
     }
 
     if (!price) {
-        return new NextResponse("price is required", { status: 400 });
+      return new NextResponse("price is required", { status: 400 });
     }
 
     if (!categoryId) {
-        return new NextResponse("category id is required", { status: 400 });
+      return new NextResponse("category id is required", { status: 400 });
     }
 
     if (!images) {
-        return new NextResponse("images is required", { status: 400 });
+      return new NextResponse("images is required", { status: 400 });
     }
 
     if (!params.storeId) {
@@ -57,7 +67,7 @@ export async function POST(
       where: {
         id: params.storeId,
         userId,
-      }
+      },
     });
 
     if (!storeByUserId) {
@@ -76,19 +86,51 @@ export async function POST(
         price,
         categoryId,
         images: {
-            createMany: {
-              data: [
-                ...images.map((image: { url: string }) => image),
-              ],
-            },
+          createMany: {
+            data: [...images.map((image: { url: string }) => image)],
           },
-      }
-    
+        },
+      },
     });
-  
+
     return NextResponse.json(car);
   } catch (error) {
-    console.log('[CARS_POST]', error);
+    console.log("[CARS_POST]", error);
     return new NextResponse("Internal error", { status: 500 });
   }
-};
+}
+
+// GET Cars
+
+export async function GET(
+  req: Request,
+  { params }: { params: { storeId: string } }
+) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const categoryId = searchParams.get("categoryId") || undefined;
+    if (!params.storeId) {
+      return new NextResponse("Store id is required", { status: 400 });
+    }
+
+    const cars = await prismadb.car.findMany({
+      where: {
+        storeId: params.storeId,
+        categoryId,
+        isAvailable: false
+      },
+      include: {
+        images: true,
+        category: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return NextResponse.json(cars);
+  } catch (error) {
+    console.log("[CARS_GET]", error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+}

@@ -59,27 +59,25 @@ export async function POST(
 
 // Get billboards
 
-
-
-// export async function GET(
-//   req: Request,
-//   { params }: { params: { storeId: string } }
-// ) {
-//   try {
-//   
-//     if (!params.storeId) {
-//       return new NextResponse("Store id is required", { status: 400 });
-//     }
-
-//     const billboards = await prismadb.billboard.findMany({
-//       where: {
-//         storeId: params.storeId
-//       }
-//     });
+export async function GET(
+  req: Request,
+  { params }: { params: { storeId: string } }
+) {
+  try {
   
-//     return NextResponse.json(billboards);
-//   } catch (error) {
-//     console.log('[BILLBOARDS_GET]', error);
-//     return new NextResponse("Internal error", { status: 500 });
-//   }
-// };
+    if (!params.storeId) {
+      return new NextResponse("Store id is required", { status: 400 });
+    }
+
+    const billboards = await prismadb.billboard.findMany({
+      where: {
+        storeId: params.storeId
+      }
+    });
+  
+    return NextResponse.json(billboards);
+  } catch (error) {
+    console.log('[BILLBOARDS_GET]', error);
+    return new NextResponse("Internal error", { status: 500 });
+  }
+};
