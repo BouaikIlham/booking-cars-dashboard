@@ -27,7 +27,7 @@ const CarsPage: React.FC<CarsPageProps> = async ({
     const formattedCars: CarColumn[] = cars.map((car) => ({
       id: car.id,
       model: car.model,
-      mileage: formatter.format(car.mileage.toNumber()),
+      mileage: car.mileage,
       capicity: car.capicity,
       transmission: car.transmission,
       isAvailable: car.isAvailable,

@@ -12,9 +12,6 @@ export type CarColumn = {
   description: string
   price: string
   createdAt: string
-
-
-
 }
 
 export const columns: ColumnDef<CarColumn>[] = [

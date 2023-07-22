@@ -60,13 +60,13 @@ model Car {
   categoryId String
   category Category @relation("CategoryToCar", fields: [categoryId], references: [id])
   model String
-  mileage Decimal
+  mileage String
   capicity String
   transmission String
   isAvailable Boolean
   description String
   price Decimal
-  images Image []
+  images Image[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -78,8 +78,12 @@ model Car {
 model Image {
   id String @id @default(uuid())
   carId String
-  car Car @relation(fields: [carId], references: [id])
+  car Car  @relation(fields: [carId], references: [id], onDelete: Cascade)
+  url String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  
   @@index([carId])
 
 }
