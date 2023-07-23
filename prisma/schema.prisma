@@ -19,6 +19,7 @@ model Store {
   updatedAt DateTime @updatedAt
   billboards Billboard [] @relation("StoreToBillboard")
   categories Category[] @relation("StoreToCategory")
+  orders Order[] @relation("StoreToOrder")
   cars Car[] @relation("StoreToCar")
 }
 
@@ -67,6 +68,7 @@ model Car {
   description String
   price Decimal
   images Image[]
+  orderItems OrderItem[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -86,4 +88,31 @@ model Image {
   
   @@index([carId])
 
+}
+
+model Order {
+  id String @id @default(uuid())
+  storeId String
+  store Store @relation("StoreToOrder", fields: [storeId], references: [id])
+  orderItems OrderItem[]
+  isPaid Boolean @default(false)
+  phone String @default("")
+  address String @default("")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([storeId])
+
+}
+
+model OrderItem {
+  id String @id @default(uuid())
+  orderId String
+  order Order @relation(fields: [orderId], references: [id])
+  carId String
+  car Car @relation(fields: [carId], references: [id])
+
+  @@index([carId])
+  @@index([orderId])
+  
 }
