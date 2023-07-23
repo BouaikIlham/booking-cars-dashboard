@@ -1,7 +1,6 @@
 "use client"
 import { ColumnDef } from "@tanstack/react-table"
-import CellAction from "./cell-action"
-
+import { CellAction } from "./cell-action"
 export type CarColumn = {
   id: string
   model: string
@@ -54,7 +53,7 @@ export const columns: ColumnDef<CarColumn>[] = [
 
   {
     id: "actions",
-    cell: ({ row }) => <CellAction />
+    cell: ({ row }) => <CellAction data={row.original} />
   }
 
 ]
