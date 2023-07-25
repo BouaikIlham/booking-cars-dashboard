@@ -6,7 +6,7 @@ import { Plus } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { DataTable } from "@/components/ui/data-table";
 import { CarColumn, columns } from "./columns";
-
+import { ApiList } from "@/components/ui/api-list";
 interface CarsClientProps {
     data: CarColumn[]
 }
@@ -31,8 +31,10 @@ const CarsClient: React.FC<CarsClientProps>= ({
         </Button>
     </div>
     <Separator />
-
     <DataTable serachKey="model" columns={columns} data={data}/>
+    <Heading title="API" description="API Calls for Cars"/>
+    <Separator />
+    <ApiList entityName="cars" entityIdName="carId"/>
    </>
   )
 }
