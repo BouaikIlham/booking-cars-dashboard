@@ -22,6 +22,8 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import ApiAlert from "@/components/ui/api-alert";
+import { Orienta } from "next/font/google";
 
 interface SettingsFormProps {
   initialData: Store;
@@ -117,9 +119,11 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
         </form>
       </Form>
       <Separator />
-        <div>
-          api alert
-        </div>
+       
+       <ApiAlert
+          title="NEXT_PUBLIC_API_URL" 
+          description={`${origin}/api/${params.storeId}`}
+          variant="public"/>
     </>
   );
 };
